@@ -1,0 +1,121 @@
+[tool.poetry]
+name = "autoscout-backend"
+version = "0.1.0"
+description = "FastAPI backend for AutoScout AI"
+authors = ["AutoScout Team"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+
+# Web framework
+fastapi = "^0.104.0"
+uvicorn = {extras = ["standard"], version = "^0.24.0"}
+pydantic = "^2.4.0"
+pydantic-settings = "^2.0.0"
+
+# Database
+sqlalchemy = "^2.0.0"
+psycopg = {extras = ["binary"], version = "^3.1.0"}
+alembic = "^1.12.0"
+geoalchemy2 = "^0.14.0"
+
+# Cache & Jobs
+redis = "^5.0.0"
+celery = "^5.3.0"
+
+# Authentication
+firebase-admin = "^6.2.0"
+
+# LLM
+anthropic = "^0.7.0"
+
+# HTTP
+httpx = "^0.25.0"
+requests = "^2.31.0"
+
+# Messaging (Twilio for dev, extensible for other providers)
+twilio = "^8.10.0"
+
+# Observability
+sentry-sdk = {extras = ["fastapi"], version = "^1.38.0"}
+structlog = "^23.2.0"
+python-json-logger = "^2.0.7"
+
+# Utils
+python-dotenv = "^1.0.0"
+python-multipart = "^0.0.6"
+pytz = "^2023.3"
+dateparser = "^1.1.0"
+
+# Vector search
+pgvector = "^0.2.0"
+
+# Optional: Geocoding
+geopy = "^2.3.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.0"
+pytest-cov = "^4.1.0"
+pytest-asyncio = "^0.21.0"
+black = "^23.10.0"
+ruff = "^0.1.0"
+mypy = "^1.6.0"
+sqlalchemy-stubs = "^0.4.0"
+
+[tool.poetry.group.test.dependencies]
+responses = "^0.24.0"
+factory-boy = "^3.3.0"
+faker = "^20.0.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 100
+target-version = ['py312']
+include = '\.pyi?$'
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+select = ["E", "F", "W", "C90", "I"]
+ignore = ["E501"]
+
+[tool.ruff.isort]
+known-first-party = ["autoscout"]
+
+[tool.mypy]
+python_version = "3.12"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+addopts = "-v --strict-markers"
+markers = [
+    "integration: integration tests",
+    "slow: slow tests",
+]
+
+[tool.coverage.run]
+branch = true
+source = ["autoscout"]
+omit = [
+    "*/migrations/*",
+    "*/tests/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+]
