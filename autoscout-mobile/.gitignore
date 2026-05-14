@@ -1,0 +1,38 @@
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+.yarn/
+.pnp
+
+# Expo
+.expo/
+.expo-shared/
+dist/
+*.eas.json
+build/
+
+# Secrets
+firebase-config.json
+secrets.json
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db

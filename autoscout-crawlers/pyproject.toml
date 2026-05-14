@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "autoscout-crawlers"
+version = "0.1.0"
+description = "AutoScout crawler workers"
+authors = ["AutoScout Team"]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+celery = "^5.3.0"
+redis = "^5.0.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
