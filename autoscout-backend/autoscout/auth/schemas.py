@@ -13,7 +13,6 @@ class UserResponse(BaseModel):
 
 
 class AuthSyncRequest(BaseModel):
-    phone_number: str
     firebase_token: str
 
 

@@ -6,8 +6,11 @@ import {
   Text,
   StyleSheet,
   ActivityIndicator,
+  Alert,
 } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
+import { useAuthStore } from '../../store/authStore';
+import { syncUser } from '../../lib/api';
 
 const styles = StyleSheet.create({
   container: {
@@ -46,6 +49,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 10,
   },
+  buttonDisabled: {
+    backgroundColor: '#ccc',
+  },
   buttonText: {
     color: '#fff',
     fontSize: 16,
@@ -58,21 +64,47 @@ export default function OTP() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { phone } = useLocalSearchParams();
+  const { confirmationResult, setUser } = useAuthStore();
 
   const handleVerify = async () => {
     if (code.length !== 6) {
-      alert('Please enter a 6-digit code');
+      Alert.alert('Error', 'Please enter a 6-digit code');
+      return;
+    }
+
+    if (!confirmationResult) {
+      Alert.alert('Error', 'OTP not ready. Please try signing up again.');
       return;
     }
 
     setLoading(true);
     try {
-      // TODO: Verify OTP with Firebase
-      // TODO: Call POST /auth/sync with phone + firebase token
-      // For now, just navigate to tabs
+      // Confirm OTP with Firebase (or mock)
+      const userCredential = await confirmationResult.confirm(code);
+      const firebaseToken = await userCredential.user.getIdToken();
+
+      // Try to sync with backend, but allow dev mode with mock tokens
+      try {
+        await syncUser(firebaseToken);
+      } catch (syncError: any) {
+        // In dev mode with mock tokens, backend will reject
+        // Allow proceeding anyway for testing
+        if (firebaseToken.startsWith('mock:')) {
+          console.warn('Dev mode: Backend rejected mock token, proceeding anyway');
+        } else {
+          throw syncError;
+        }
+      }
+
+      // Save user and token to Zustand store
+      await setUser(userCredential.user, firebaseToken);
+
+      // Navigate to authenticated screens
       router.replace('/(tabs)/searches');
     } catch (error) {
-      alert('Error: ' + (error instanceof Error ? error.message : 'Unknown error'));
+      const message = error instanceof Error ? error.message : 'Verification failed';
+      Alert.alert('Error', message);
+      console.error('OTP verification error:', error);
     } finally {
       setLoading(false);
     }
@@ -81,9 +113,7 @@ export default function OTP() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Enter verification code</Text>
-      <Text style={styles.subtitle}>
-        We sent a code to {phone}
-      </Text>
+      <Text style={styles.subtitle}>We sent a code to {phone}</Text>
 
       <TextInput
         placeholder="000000"
@@ -93,10 +123,11 @@ export default function OTP() {
         maxLength={6}
         style={styles.input}
         editable={!loading}
+        autoFocus
       />
 
       <TouchableOpacity
-        style={styles.button}
+        style={[styles.button, loading && styles.buttonDisabled]}
         onPress={handleVerify}
         disabled={loading}
       >

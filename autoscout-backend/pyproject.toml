@@ -4,6 +4,7 @@ version = "0.1.0"
 description = "FastAPI backend for AutoScout AI"
 authors = ["AutoScout Team"]
 license = "MIT"
+package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.12"
@@ -28,7 +29,7 @@ celery = "^5.3.0"
 firebase-admin = "^6.2.0"
 
 # LLM
-anthropic = "^0.7.0"
+anthropic = "^0.40.0"
 
 # HTTP
 httpx = "^0.25.0"

@@ -1,8 +1,6 @@
-version: '3.9'
-
 services:
   postgres:
-    image: postgres:16
+    image: postgis/postgis:16-3.4
     environment:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: autoscout_dev
@@ -30,15 +28,13 @@ services:
     build: ./autoscout-backend
     ports:
       - "8000:8000"
+    env_file:
+      - ./autoscout-backend/.env
     environment:
       FASTAPI_ENV: dev
-      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/autoscout_dev
+      DATABASE_URL: postgresql+psycopg://postgres:postgres@postgres:5432/autoscout_dev
       REDIS_URL: redis://redis:6379/0
-      TWILIO_ACCOUNT_SID: ${TWILIO_ACCOUNT_SID}
-      TWILIO_AUTH_TOKEN: ${TWILIO_AUTH_TOKEN}
-      TWILIO_WHATSAPP_PHONE_NUMBER: ${TWILIO_WHATSAPP_PHONE_NUMBER}
-      FIREBASE_CREDENTIALS: ${FIREBASE_CREDENTIALS}
-      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
+      WATCHFILES_FORCE_POLLING: "true"
     depends_on:
       postgres:
         condition: service_healthy
@@ -52,7 +48,7 @@ services:
     build: ./autoscout-crawlers
     environment:
       REDIS_URL: redis://redis:6379/0
-      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/autoscout_dev
+      DATABASE_URL: postgresql+psycopg://postgres:postgres@postgres:5432/autoscout_dev
     depends_on:
       - redis
       - postgres

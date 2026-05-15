@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { useAuthStore } from '../../store/authStore';
 
 const styles = StyleSheet.create({
   container: {
@@ -55,9 +56,10 @@ const styles = StyleSheet.create({
 
 export default function Settings() {
   const router = useRouter();
+  const logout = useAuthStore((state) => state.logout);
 
-  const handleSignOut = () => {
-    // TODO: Sign out from Firebase
+  const handleSignOut = async () => {
+    await logout();
     router.replace('/(auth)/signup');
   };
 
