@@ -12,7 +12,7 @@ from geopy.exc import GeocoderServiceError
 from sqlalchemy.orm import Session
 
 from autoscout.auth.dependencies import get_db_user
-from autoscout.db.models import SearchProfile, User
+from autoscout.db.models import LlmCall, SearchProfile, User
 from autoscout.db.session import get_db
 from autoscout.settings import settings
 
@@ -109,6 +109,7 @@ def _get_owned_profile(profile_id: UUID, user: User, db: Session) -> SearchProfi
 def parse_profile(
     body: ParseRequest,
     user: User = Depends(get_db_user),
+    db: Session = Depends(get_db),
 ) -> ParseResponse:
     """Parse free-text car description into a structured SearchProfileCreate."""
     if not settings.ANTHROPIC_API_KEY:
@@ -171,6 +172,18 @@ def parse_profile(
         input_tokens=response.usage.input_tokens,
         output_tokens=response.usage.output_tokens,
     )
+
+    try:
+        db.add(LlmCall(
+            user_id=user.id,
+            endpoint="/profiles/parse",
+            model="claude-sonnet-4-6",
+            input_tokens=response.usage.input_tokens,
+            output_tokens=response.usage.output_tokens,
+        ))
+        db.commit()
+    except Exception as e:
+        logger.warning("llm_call_log_failed", error=str(e))
 
     return ParseResponse(
         profile=profile_create,

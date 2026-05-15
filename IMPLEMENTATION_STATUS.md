@@ -1,6 +1,6 @@
 # AutoScout Implementation Status
 
-## Sprint 2 — Search Profile Creation ✅ COMPLETE (Backend)
+## Sprint 2 — Search Profile Creation ✅ COMPLETE
 
 ### What Works End-to-End (Verified)
 1. ✅ **Search Profile CRUD**:
@@ -20,8 +20,23 @@
    - System prompt versioned at `autoscout-prompts/profile_parser/v1.md`
 
 3. ✅ **Database**:
-   - Migration 0003 applied: all search profile fields added (make, model, year range, price range, currency, mileage, location lat/lng, radius, body_type, transmission, fuel_type, free_text_criteria, delivery_time_local, timezone)
+   - Migration 0003: all search profile fields (make, model, year range, price range, currency, mileage, location lat/lng, radius, body_type, transmission, fuel_type, free_text_criteria, delivery_time_local, timezone)
+   - Migration 0004: `llm_calls` table for cost telemetry (user_id, endpoint, model, input_tokens, output_tokens)
    - PostGIS deferred to Sprint 4 — location stored as plain Float (sufficient for Sprint 2–3)
+
+4. ✅ **Mobile — Searches tab**:
+   - List view: profile cards with name, summary line, active/inactive toggle, edit and delete (with confirmation)
+   - Empty state with "New Search" and "Describe in words" entry points
+   - Create / Edit form: name, make, model, year range, max price + EUR/ALL toggle, max mileage, transmission chips, fuel type chips, free-text notes
+   - "Describe in words" mode: text input → `POST /profiles/parse` → pre-fill form, yellow border on low-confidence fields
+   - Pull-to-refresh on list
+
+5. ✅ **Cost Telemetry**:
+   - Every `/profiles/parse` call logged to `llm_calls` table (tokens, model, user, endpoint)
+
+6. ✅ **Prompt Regression Harness**:
+   - 35 test cases in `autoscout-prompts/profile_parser/tests.yaml` (16 Albanian, 11 English, 8 edge cases)
+   - Runner: `autoscout-prompts/profile_parser/run_tests.py` — `--id`, `--lang`, `--fail-fast`, `--verbose` flags
 
 ### ✅ Implemented in Sprint 2
 
@@ -30,18 +45,25 @@
 - [x] `autoscout/profiles/router.py` — 7 endpoints (CRUD + toggle + parse)
 - [x] Claude Sonnet 4.6 tool-use integration for NL parsing
 - [x] Nominatim geocoding with Albania-first fallback
-- [x] Alembic migration 0003 (PostGIS line removed — installed separately in prod)
+- [x] Alembic migration 0003 (search profile fields)
+- [x] Alembic migration 0004 (`llm_calls` cost telemetry table)
+- [x] `LlmCall` ORM model; every parse call persisted
 - [x] Versioned system prompt: `autoscout-prompts/profile_parser/v1.md`
+- [x] Dev mode auth: `mock:<phone>` tokens accepted by backend in `FASTAPI_ENV=dev`
+- [x] `WATCHFILES_FORCE_POLLING=true` in docker-compose for hot-reload on macOS
 
-### ⏳ Remaining for Sprint 2
-- [ ] **Mobile — Searches tab UI**:
-  - List view: profile cards with name, summary, active toggle, edit/delete swipe
-  - Create flow: "Form" entry point and "Describe in words" (NL) entry point
-  - Form: make picker, model field, year/price/mileage sliders, body/transmission/fuel chips, location picker + radius
-  - NL flow: text input → parse → pre-fill form → highlight low-confidence fields in yellow
-  - Edit flow reuses form components
-- [ ] **Location picker**: Mapbox or Google Maps RN component (default center Tiranë, radius circle overlay)
-- [ ] **Prompt regression harness**: 30+ Albanian/English test cases in `autoscout-prompts/` with CI job
+#### Mobile
+- [x] `lib/api.ts` — `SearchProfile` type + `profilesApi` (list, create, update, remove, toggle, parse)
+- [x] `store/profileStore.ts` — Zustand store with fetch/create/update/remove/toggle
+- [x] `app/(tabs)/searches.tsx` — list view with pull-to-refresh, profile cards, empty state
+- [x] `app/profile-form.tsx` — create/edit screen with Form and NL modes, low-confidence highlighting
+
+#### Prompt Harness
+- [x] `autoscout-prompts/profile_parser/tests.yaml` — 35 regression test cases
+- [x] `autoscout-prompts/profile_parser/run_tests.py` — test runner
+
+### Deferred from Sprint 2
+- Location picker / map (user decision — not needed yet)
 
 ---
 
@@ -169,20 +191,7 @@
 
 ## Next Steps (Priority Order)
 
-### Sprint 2 — Remaining (Mobile UI)
-1. **Searches tab list view**
-   - Profile cards with name, summary line, active toggle, edit/delete swipe actions
-   - Empty state: "Create your first search" CTA
-
-2. **Search profile create flow**
-   - "Form" entry point — make/model/year/price/mileage/body/fuel/transmission/location pickers
-   - "Describe in words" entry point — text input → `POST /profiles/parse` → pre-fill form
-   - Highlight low-confidence fields (`needs_review: true`) in yellow
-
-3. **Location picker screen**
-   - Mapbox or Google Maps RN; default center Tiranë; radius circle overlay
-
-### Sprint 3 — Multi-Source Crawling
+### Sprint 3 — Multi-Source Crawling (Next)
 4. Add real merrjep.al scraping (replace mock adapter)
 5. Add second source (njoftime.com or similar)
 6. Celery worker + Redis scheduler for daily crawl jobs

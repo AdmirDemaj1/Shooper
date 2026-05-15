@@ -81,6 +81,18 @@ class Listing(Base):
     created_at = Column(DateTime, default=_now)
 
 
+class LlmCall(Base):
+    __tablename__ = "llm_calls"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="SET NULL"), nullable=True, index=True)
+    endpoint = Column(String(100), nullable=False)
+    model = Column(String(100), nullable=False)
+    input_tokens = Column(Integer, nullable=False)
+    output_tokens = Column(Integer, nullable=False)
+    created_at = Column(DateTime, default=_now)
+
+
 class Match(Base):
     __tablename__ = "matches"
 
