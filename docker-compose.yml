@@ -49,12 +49,30 @@ services:
     environment:
       REDIS_URL: redis://redis:6379/0
       DATABASE_URL: postgresql+psycopg://postgres:postgres@postgres:5432/autoscout_dev
+      CRAWL_SOURCES: merrjep,mobile_al,gjirafa,njoftime
+      CRAWL_SCHEDULE_HOUR: "6"
+      CRAWL_SCHEDULE_MINUTE: "0"
     depends_on:
       - redis
       - postgres
     volumes:
       - ./autoscout-crawlers:/app
     command: poetry run celery -A crawler.worker worker --loglevel=info
+
+  crawler-beat:
+    build: ./autoscout-crawlers
+    environment:
+      REDIS_URL: redis://redis:6379/0
+      DATABASE_URL: postgresql+psycopg://postgres:postgres@postgres:5432/autoscout_dev
+      CRAWL_SOURCES: merrjep,mobile_al,gjirafa,njoftime
+      CRAWL_SCHEDULE_HOUR: "6"
+      CRAWL_SCHEDULE_MINUTE: "0"
+    depends_on:
+      - redis
+      - postgres
+    volumes:
+      - ./autoscout-crawlers:/app
+    command: poetry run celery -A crawler.worker beat --loglevel=info
 
 volumes:
   postgres_data:

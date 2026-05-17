@@ -1,64 +1,7 @@
 import argparse
 import sys
-import hashlib
-import json
-from crawler.sources.merrjep import MerrjepAdapter
-from crawler.db import SessionLocal
-
-
-def compute_dedup_hash(listing: dict) -> str:
-    """Generate a dedup hash from source + listing_id."""
-    key = f"{listing['source']}_{listing['source_listing_id']}"
-    return hashlib.sha256(key.encode()).hexdigest()
-
-
-def persist_listings(source_name: str, listings: list):
-    """Persist parsed listings to the database."""
-    # Import here to avoid issues when models aren't available
-    import sys
-    sys.path.insert(0, "/Users/admirdemaj/Desktop/Personal/Shooper/autoscout-backend")
-
-    from autoscout.db.models import Listing
-
-    db = SessionLocal()
-    try:
-        inserted = 0
-        skipped = 0
-
-        for parsed in listings:
-            dedup_hash = compute_dedup_hash(parsed)
-
-            # Check if listing already exists
-            existing = db.query(Listing).filter_by(dedup_hash=dedup_hash).first()
-            if existing:
-                existing.last_seen_at = existing.first_seen_at  # Refresh timestamp
-                skipped += 1
-                continue
-
-            # Insert new listing
-            listing = Listing(
-                source_id=source_name,
-                source_listing_id=parsed['source_listing_id'],
-                source_url=parsed['source_url'],
-                title=parsed['title'],
-                description=parsed.get('description'),
-                make=parsed['make'],
-                model=parsed['model'],
-                year=parsed['year'],
-                mileage=parsed['mileage'],
-                price=parsed['price'],
-                currency=parsed['currency'],
-                location_text=parsed['location_text'],
-                dedup_hash=dedup_hash,
-                raw_payload=parsed,
-            )
-            db.add(listing)
-            inserted += 1
-
-        db.commit()
-        return inserted, skipped
-    finally:
-        db.close()
+from crawler.persistence import persist_listings
+from crawler.sources.registry import get_adapter
 
 
 def main():
@@ -70,11 +13,7 @@ def main():
     print(f"Crawling {args.source} for profile {args.profile}...")
 
     try:
-        if args.source == "merrjep":
-            adapter = MerrjepAdapter()
-        else:
-            print(f"Error: Unknown source {args.source}")
-            sys.exit(1)
+        adapter = get_adapter(args.source)
 
         # Execute search
         raw_listings = adapter.search({"profile_id": args.profile})
@@ -95,8 +34,10 @@ def main():
 
         # Persist to database
         print(f"Persisting listings to database...")
-        inserted, skipped = persist_listings(adapter.name, parsed_listings)
+        inserted, updated, skipped = persist_listings(adapter.name, parsed_listings)
         print(f"✓ Inserted {inserted} new listings")
+        if updated > 0:
+            print(f"✓ Updated {updated} existing listings")
         if skipped > 0:
             print(f"✓ Skipped {skipped} duplicate listings")
         print(f"✓ Done!")

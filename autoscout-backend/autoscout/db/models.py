@@ -1,6 +1,6 @@
 import uuid
 from datetime import datetime, timezone
-from sqlalchemy import Column, String, DateTime, Boolean, Integer, ForeignKey, Float, Text, Numeric
+from sqlalchemy import Column, String, DateTime, Boolean, Integer, ForeignKey, Float, Text, Numeric, UniqueConstraint
 from sqlalchemy.dialects.postgresql import UUID, JSONB
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
@@ -58,6 +58,9 @@ class SearchProfile(Base):
 
 class Listing(Base):
     __tablename__ = "listings"
+    __table_args__ = (
+        UniqueConstraint("source_id", "source_listing_id", name="uq_listings_source_listing"),
+    )
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     source_id = Column(String(50), nullable=False, index=True)
