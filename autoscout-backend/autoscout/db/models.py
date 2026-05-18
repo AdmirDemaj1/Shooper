@@ -1,6 +1,6 @@
 import uuid
 from datetime import datetime, timezone
-from sqlalchemy import Column, String, DateTime, Boolean, Integer, ForeignKey, Float, Text, Numeric, UniqueConstraint
+from sqlalchemy import Column, String, DateTime, Boolean, Integer, ForeignKey, Float, Text, Numeric, UniqueConstraint, Index
 from sqlalchemy.dialects.postgresql import UUID, JSONB
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
@@ -75,6 +75,9 @@ class Listing(Base):
     price = Column(String(50))
     currency = Column(String(3), default="EUR")
     location_text = Column(String(255))
+    transmission = Column(String(50), nullable=True)
+    fuel_type = Column(String(50), nullable=True)
+    body_type = Column(String(50), nullable=True)
     seller_name = Column(String(255))
     raw_payload = Column(JSONB, nullable=True)
     dedup_hash = Column(String(255), index=True)
@@ -82,6 +85,15 @@ class Listing(Base):
     last_seen_at = Column(DateTime, default=_now, onupdate=_now)
     is_active = Column(Boolean, default=True)
     created_at = Column(DateTime, default=_now)
+
+    # Platform listing fields (source_id = 'autoscout')
+    seller_user_id = Column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="SET NULL"), nullable=True, index=True)
+    status = Column(String(20), nullable=False, default="active")
+    photo_urls = Column(JSONB, nullable=False, default=list)
+    contact_phone = Column(String(30), nullable=True)
+    views_count = Column(Integer, nullable=False, default=0)
+
+    seller = relationship("User", foreign_keys=[seller_user_id])
 
 
 class LlmCall(Base):
@@ -98,15 +110,26 @@ class LlmCall(Base):
 
 class Match(Base):
     __tablename__ = "matches"
+    __table_args__ = (
+        UniqueConstraint("search_profile_id", "listing_id", name="uq_matches_profile_listing"),
+        Index("ix_matches_profile_delivered_at", "search_profile_id", "delivered_at"),
+        Index("ix_matches_profile_created_at", "search_profile_id", "created_at"),
+    )
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     search_profile_id = Column(UUID(as_uuid=True), ForeignKey("search_profiles.id"), nullable=False, index=True)
     listing_id = Column(UUID(as_uuid=True), ForeignKey("listings.id"), nullable=False, index=True)
     relevance_score = Column(Integer)
-    llm_reasoning = Column(String(1000))
+    score_source = Column(String(20), default="llm")  # 'llm' | 'fallback' | 'tiebreaker'
+    llm_reasoning = Column(Text)
+    summary = Column(Text)  # short blurb for WhatsApp card
+    selected_for_delivery = Column(Boolean, default=False, nullable=False)
     delivered_at = Column(DateTime)
+    delivery_channel = Column(String(50))  # 'whatsapp'
     delivery_status = Column(String(50), default="pending")
+    user_action = Column(String(50))  # 'clicked' | 'dismissed' | 'saved'
     created_at = Column(DateTime, default=_now)
+    updated_at = Column(DateTime, default=_now, onupdate=_now)
 
     search_profile = relationship("SearchProfile", back_populates="matches")
     listing = relationship("Listing")

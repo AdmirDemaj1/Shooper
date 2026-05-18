@@ -1,4 +1,4 @@
-# Sprint 5 — WhatsApp Integration
+# Sprint 6 — WhatsApp Integration
 
 **Duration:** Weeks 9–10
 **Theme:** Get the daily digest into users' WhatsApp inboxes. Handle replies (Pause, Stop). Treat Meta template approval as the long pole — submit on day 1.

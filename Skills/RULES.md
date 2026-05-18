@@ -1,0 +1,7 @@
+- Follow the Sprints. Each Sprint should be completed before we continue with the next sprint. Always logic and evaluate what is mentioned in the Sprints. If something feels off and you want to improve it or have other ideas of implementation comme up with suggestions.
+- For each Sprint that you finish, write in the Completed folder in an md file what was completed and things that we want to implement later write them in NotImplemented folder.
+- Put code security first, thats the main priority. Always generate new tests in the end of the sprints or update existing ones. These tests should pass.
+- Everything should be docummented.
+- If you dont have enough info about packages, libraries and other stuff dont assume ask me so I can give you content.
+- Endpoints created or updated? Update the dos in autoscount-backend/API.md 
+- Before using a new tool, first let me know what tool are you using. What is the prupose of it and what does it solve. Also an explanation why you think it is the right tool to be used.

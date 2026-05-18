@@ -192,4 +192,4 @@ For each of 5 internal test profiles:
 
 ## Next Sprint Preview
 
-[Sprint 5 — WhatsApp Integration](Sprint-5-WhatsApp-Integration.md): wire the daily digest to WhatsApp Business Cloud API, get templates approved, and handle inbound opt-outs.
+[Sprint 5 — User Listings](Sprint-5-User-Listings.md): let sellers post directly on AutoScout; platform listings feed the same AI pipeline and trigger immediate matching for buyers.

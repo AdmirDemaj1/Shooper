@@ -74,6 +74,18 @@ export default function Settings() {
       </View>
 
       <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Selling</Text>
+        <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/my-listings')}>
+          <Text style={styles.menuText}>My Listings</Text>
+          <MaterialIcons name="arrow-forward" size={20} color="#999" />
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.menuItem} onPress={() => router.push('/post-listing')}>
+          <Text style={styles.menuText}>Post a Car for Sale</Text>
+          <MaterialIcons name="arrow-forward" size={20} color="#999" />
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.section}>
         <Text style={styles.sectionTitle}>Notifications</Text>
         <TouchableOpacity style={styles.menuItem}>
           <Text style={styles.menuText}>WhatsApp Settings</Text>

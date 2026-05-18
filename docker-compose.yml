@@ -1,6 +1,6 @@
 services:
   postgres:
-    image: postgis/postgis:16-3.4
+    image: postgres:16
     environment:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: autoscout_dev
@@ -34,6 +34,7 @@ services:
       FASTAPI_ENV: dev
       DATABASE_URL: postgresql+psycopg://postgres:postgres@postgres:5432/autoscout_dev
       REDIS_URL: redis://redis:6379/0
+      CRAWL_SOURCES: merrjep,mobile_al,gjirafa,njoftime
       WATCHFILES_FORCE_POLLING: "true"
     depends_on:
       postgres:
@@ -42,6 +43,7 @@ services:
         condition: service_healthy
     volumes:
       - ./autoscout-backend:/app
+      - ./autoscout-prompts:/autoscout-prompts
     command: sh -c "poetry run alembic upgrade head && poetry run uvicorn autoscout.main:app --host 0.0.0.0 --port 8000 --reload"
 
   crawler:
@@ -52,12 +54,13 @@ services:
       CRAWL_SOURCES: merrjep,mobile_al,gjirafa,njoftime
       CRAWL_SCHEDULE_HOUR: "6"
       CRAWL_SCHEDULE_MINUTE: "0"
+      MERRJEP_USE_MOCK: "false"
     depends_on:
       - redis
       - postgres
     volumes:
       - ./autoscout-crawlers:/app
-    command: poetry run celery -A crawler.worker worker --loglevel=info
+    command: poetry run celery -A crawler.worker worker -Q crawler --loglevel=info
 
   crawler-beat:
     build: ./autoscout-crawlers
@@ -73,6 +76,26 @@ services:
     volumes:
       - ./autoscout-crawlers:/app
     command: poetry run celery -A crawler.worker beat --loglevel=info
+
+  # Matching pipeline Celery worker (+ embedded Beat for daily scheduling)
+  backend-worker:
+    build: ./autoscout-backend
+    env_file:
+      - ./autoscout-backend/.env
+    environment:
+      DATABASE_URL: postgresql+psycopg://postgres:postgres@postgres:5432/autoscout_dev
+      REDIS_URL: redis://redis:6379/0
+      PIPELINE_SCHEDULE_HOUR: "7"
+      PIPELINE_SCHEDULE_MINUTE: "0"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./autoscout-backend:/app
+      - ./autoscout-prompts:/autoscout-prompts
+    command: poetry run celery -A autoscout.matching.worker worker -B -Q backend --loglevel=info
 
 volumes:
   postgres_data:

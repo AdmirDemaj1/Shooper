@@ -47,6 +47,7 @@ export default function RootLayout() {
       <Stack.Screen name="(auth)" />
       <Stack.Screen name="(tabs)" />
       <Stack.Screen name="profile-form" options={{ headerShown: true, presentation: 'card' }} />
+      <Stack.Screen name="match/[id]" options={{ headerShown: true, title: 'Match Detail', presentation: 'card' }} />
     </Stack>
   );
 }

@@ -17,6 +17,7 @@ app.conf.task_serializer = "json"
 app.conf.accept_content = ["json"]
 app.conf.result_serializer = "json"
 app.conf.timezone = "UTC"
+app.conf.task_default_queue = "crawler"
 app.conf.beat_schedule = {
     "crawl-active-profiles-daily": {
         "task": "crawler.worker.schedule_daily_crawls",

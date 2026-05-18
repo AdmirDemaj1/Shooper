@@ -1,0 +1,1374 @@
+{
+  "_meta": {
+    "description": "Hand-graded (profile, listing) pairs for ranking prompt regression testing.",
+    "scoring_guide": "score_min/score_max define the acceptable range. MAE gate: avg |predicted - midpoint| <= 8.",
+    "version": "v1",
+    "total_cases": 50
+  },
+  "cases": [
+    {
+      "id": "tc001",
+      "description": "Perfect match — exact make/model, low mileage, single owner mentioned",
+      "profile": {
+        "make": "Volkswagen",
+        "model": "Golf",
+        "year_min": 2017,
+        "year_max": 2021,
+        "price_max": 12000,
+        "currency": "EUR",
+        "mileage_max": 150000,
+        "free_text_criteria": "single owner, no accidents, full service history"
+      },
+      "listing": {
+        "title": "VW Golf 7 2019 — single owner, full service history",
+        "make": "Volkswagen",
+        "model": "Golf",
+        "year": 2019,
+        "price": "9800",
+        "currency": "EUR",
+        "mileage": 72000,
+        "location": "Tiranë",
+        "description": "One careful owner from new. Full VW service history, no accidents, excellent condition inside and out."
+      },
+      "score_min": 88,
+      "score_max": 100
+    },
+    {
+      "id": "tc002",
+      "description": "Good match — right make/model/year but no service history mentioned",
+      "profile": {
+        "make": "Volkswagen",
+        "model": "Golf",
+        "year_min": 2017,
+        "year_max": 2021,
+        "price_max": 12000,
+        "currency": "EUR",
+        "mileage_max": 150000,
+        "free_text_criteria": "single owner, no accidents, full service history"
+      },
+      "listing": {
+        "title": "VW Golf 7 2018 facelift",
+        "make": "Volkswagen",
+        "model": "Golf",
+        "year": 2018,
+        "price": "10500",
+        "currency": "EUR",
+        "mileage": 98000,
+        "location": "Durrës",
+        "description": "Good condition, no visible damage. Two owners."
+      },
+      "score_min": 60,
+      "score_max": 80
+    },
+    {
+      "id": "tc003",
+      "description": "Adequate — right make but wrong model variant (Golf 5 not Golf 7)",
+      "profile": {
+        "make": "Volkswagen",
+        "model": "Golf 7",
+        "year_min": 2017,
+        "year_max": 2021,
+        "price_max": 12000,
+        "currency": "EUR",
+        "mileage_max": 150000,
+        "free_text_criteria": ""
+      },
+      "listing": {
+        "title": "VW Golf 5 2005",
+        "make": "Volkswagen",
+        "model": "Golf",
+        "year": 2005,
+        "price": "3500",
+        "currency": "EUR",
+        "mileage": 180000,
+        "location": "Elbasan",
+        "description": "Runs well, some cosmetic marks."
+      },
+      "score_min": 0,
+      "score_max": 35
+    },
+    {
+      "id": "tc004",
+      "description": "Weak match — suspicious listing, very sparse description",
+      "profile": {
+        "make": "Toyota",
+        "model": "Yaris",
+        "year_min": 2018,
+        "year_max": 2023,
+        "price_max": 14000,
+        "currency": "EUR",
+        "mileage_max": 100000,
+        "free_text_criteria": "low mileage preferred"
+      },
+      "listing": {
+        "title": "Toyota Yaris 2020",
+        "make": "Toyota",
+        "model": "Yaris",
+        "year": 2020,
+        "price": "13500",
+        "currency": "EUR",
+        "mileage": 95000,
+        "location": "Tiranë",
+        "description": "Call for info."
+      },
+      "score_min": 30,
+      "score_max": 60
+    },
+    {
+      "id": "tc005",
+      "description": "Excellent — all criteria met, detailed description, well below budget",
+      "profile": {
+        "make": "Toyota",
+        "model": "Yaris",
+        "year_min": 2018,
+        "year_max": 2023,
+        "price_max": 14000,
+        "currency": "EUR",
+        "mileage_max": 100000,
+        "free_text_criteria": "low mileage, good interior, parking sensors"
+      },
+      "listing": {
+        "title": "Toyota Yaris 2021 – full options",
+        "make": "Toyota",
+        "model": "Yaris",
+        "year": 2021,
+        "price": "10800",
+        "currency": "EUR",
+        "mileage": 38000,
+        "location": "Tiranë",
+        "description": "Excellent condition, parking sensors front and rear, reverse camera, pristine interior, one owner, no accidents."
+      },
+      "score_min": 90,
+      "score_max": 100
+    },
+    {
+      "id": "tc006",
+      "description": "Poor — salvage language, unclear mileage, near price ceiling",
+      "profile": {
+        "make": "BMW",
+        "model": "3 Series",
+        "year_min": 2015,
+        "year_max": 2020,
+        "price_max": 20000,
+        "currency": "EUR",
+        "mileage_max": 200000,
+        "free_text_criteria": "clean title, no flood damage"
+      },
+      "listing": {
+        "title": "BMW 320d 2016 — damaged",
+        "make": "BMW",
+        "model": "320d",
+        "year": 2016,
+        "price": "19800",
+        "currency": "EUR",
+        "mileage": 195000,
+        "location": "Vlorë",
+        "description": "Accident damage to front, airbags deployed. Sold as-is."
+      },
+      "score_min": 0,
+      "score_max": 20
+    },
+    {
+      "id": "tc007",
+      "description": "Good — requested manual, listing confirms manual transmission",
+      "profile": {
+        "make": "Ford",
+        "model": "Focus",
+        "year_min": 2016,
+        "year_max": 2020,
+        "price_max": 10000,
+        "currency": "EUR",
+        "mileage_max": 180000,
+        "transmission": "manual",
+        "free_text_criteria": "manual gearbox preferred"
+      },
+      "listing": {
+        "title": "Ford Focus 2018 manual",
+        "make": "Ford",
+        "model": "Focus",
+        "year": 2018,
+        "price": "8200",
+        "currency": "EUR",
+        "mileage": 110000,
+        "location": "Shkodër",
+        "description": "6-speed manual, diesel, very good condition, new tires."
+      },
+      "score_min": 72,
+      "score_max": 90
+    },
+    {
+      "id": "tc008",
+      "description": "Adequate — right car but no mention of manual transmission",
+      "profile": {
+        "make": "Ford",
+        "model": "Focus",
+        "year_min": 2016,
+        "year_max": 2020,
+        "price_max": 10000,
+        "currency": "EUR",
+        "mileage_max": 180000,
+        "transmission": "manual",
+        "free_text_criteria": "manual gearbox preferred"
+      },
+      "listing": {
+        "title": "Ford Focus 2017",
+        "make": "Ford",
+        "model": "Focus",
+        "year": 2017,
+        "price": "7500",
+        "currency": "EUR",
+        "mileage": 135000,
+        "location": "Tiranë",
+        "description": "Good condition."
+      },
+      "score_min": 45,
+      "score_max": 65
+    },
+    {
+      "id": "tc009",
+      "description": "Excellent — diesel preference met, full description, well under budget",
+      "profile": {
+        "make": null,
+        "model": null,
+        "year_min": 2016,
+        "year_max": 2022,
+        "price_max": 15000,
+        "currency": "EUR",
+        "mileage_max": 180000,
+        "fuel_type": "diesel",
+        "free_text_criteria": "diesel, economical, good for long highway drives"
+      },
+      "listing": {
+        "title": "Mercedes C220d 2018 — highway car",
+        "make": "Mercedes-Benz",
+        "model": "C220d",
+        "year": 2018,
+        "price": "13200",
+        "currency": "EUR",
+        "mileage": 142000,
+        "location": "Tiranë",
+        "description": "Diesel 2.2L, very economical on motorway, full service history, highway use mostly, excellent tyres, xenon lights."
+      },
+      "score_min": 85,
+      "score_max": 100
+    },
+    {
+      "id": "tc010",
+      "description": "Weak — price at the very ceiling, high mileage, bare description",
+      "profile": {
+        "make": "Audi",
+        "model": "A4",
+        "year_min": 2014,
+        "year_max": 2019,
+        "price_max": 16000,
+        "currency": "EUR",
+        "mileage_max": 220000,
+        "free_text_criteria": "well maintained, no rust"
+      },
+      "listing": {
+        "title": "Audi A4 2015",
+        "make": "Audi",
+        "model": "A4",
+        "year": 2015,
+        "price": "15950",
+        "currency": "EUR",
+        "mileage": 215000,
+        "location": "Durrës",
+        "description": "Car available."
+      },
+      "score_min": 28,
+      "score_max": 50
+    },
+    {
+      "id": "tc011",
+      "description": "Excellent — buyer wants sunroof, listing explicitly mentions panoramic roof",
+      "profile": {
+        "make": "Skoda",
+        "model": "Octavia",
+        "year_min": 2017,
+        "year_max": 2022,
+        "price_max": 18000,
+        "currency": "EUR",
+        "mileage_max": 160000,
+        "free_text_criteria": "sunroof or panoramic roof, family car"
+      },
+      "listing": {
+        "title": "Skoda Octavia 2019 Combi — panoramic roof",
+        "make": "Skoda",
+        "model": "Octavia",
+        "year": 2019,
+        "price": "14500",
+        "currency": "EUR",
+        "mileage": 87000,
+        "location": "Tiranë",
+        "description": "Panoramic sunroof, spacious boot, family-owned, full dealer service history, no accidents."
+      },
+      "score_min": 88,
+      "score_max": 100
+    },
+    {
+      "id": "tc012",
+      "description": "Good — location preferred city matches",
+      "profile": {
+        "make": null,
+        "model": null,
+        "year_min": 2015,
+        "year_max": 2021,
+        "price_max": 10000,
+        "currency": "EUR",
+        "mileage_max": 200000,
+        "location_text": "Durrës",
+        "free_text_criteria": "prefer Durrës area"
+      },
+      "listing": {
+        "title": "Opel Astra 2017 — Durrës",
+        "make": "Opel",
+        "model": "Astra",
+        "year": 2017,
+        "price": "8400",
+        "currency": "EUR",
+        "mileage": 125000,
+        "location": "Durrës",
+        "description": "Good condition, recently serviced, two owners."
+      },
+      "score_min": 70,
+      "score_max": 88
+    },
+    {
+      "id": "tc013",
+      "description": "Adequate — correct model but location far from preferred city",
+      "profile": {
+        "make": null,
+        "model": null,
+        "year_min": 2015,
+        "year_max": 2021,
+        "price_max": 10000,
+        "currency": "EUR",
+        "mileage_max": 200000,
+        "location_text": "Durrës",
+        "free_text_criteria": "prefer Durrës area"
+      },
+      "listing": {
+        "title": "Opel Astra 2016 — Gjirokastër",
+        "make": "Opel",
+        "model": "Astra",
+        "year": 2016,
+        "price": "7500",
+        "currency": "EUR",
+        "mileage": 155000,
+        "location": "Gjirokastër",
+        "description": "Decent condition, minor scratches."
+      },
+      "score_min": 40,
+      "score_max": 65
+    },
+    {
+      "id": "tc014",
+      "description": "Poor — year and make match but description has red flags (no documents)",
+      "profile": {
+        "make": "Honda",
+        "model": null,
+        "year_min": 2014,
+        "year_max": 2020,
+        "price_max": 12000,
+        "currency": "EUR",
+        "mileage_max": 170000,
+        "free_text_criteria": "clean documentation, no issues"
+      },
+      "listing": {
+        "title": "Honda Civic 2016",
+        "make": "Honda",
+        "model": "Civic",
+        "year": 2016,
+        "price": "8900",
+        "currency": "EUR",
+        "mileage": 145000,
+        "location": "Fier",
+        "description": "No documents at the moment, sold as-is. Quick sale needed."
+      },
+      "score_min": 5,
+      "score_max": 30
+    },
+    {
+      "id": "tc015",
+      "description": "Excellent — electric car preference, buyer mentioned eco-friendly",
+      "profile": {
+        "make": null,
+        "model": null,
+        "year_min": 2019,
+        "year_max": 2024,
+        "price_max": 30000,
+        "currency": "EUR",
+        "mileage_max": 80000,
+        "fuel_type": "electric",
+        "free_text_criteria": "electric or hybrid, eco-friendly, low running costs"
+      },
+      "listing": {
+        "title": "Nissan Leaf 2021 — fully electric",
+        "make": "Nissan",
+        "model": "Leaf",
+        "year": 2021,
+        "price": "18500",
+        "currency": "EUR",
+        "mileage": 31000,
+        "location": "Tiranë",
+        "description": "Fully electric, 40kWh battery, excellent range, low running costs, charged at home, one owner."
+      },
+      "score_min": 88,
+      "score_max": 100
+    },
+    {
+      "id": "tc016",
+      "description": "Good — petrol hybrid for buyer who asked for electric or hybrid",
+      "profile": {
+        "make": null,
+        "model": null,
+        "year_min": 2019,
+        "year_max": 2024,
+        "price_max": 30000,
+        "currency": "EUR",
+        "mileage_max": 80000,
+        "fuel_type": "electric",
+        "free_text_criteria": "electric or hybrid, eco-friendly, low running costs"
+      },
+      "listing": {
+        "title": "Toyota Corolla 2020 hybrid",
+        "make": "Toyota",
+        "model": "Corolla",
+        "year": 2020,
+        "price": "20000",
+        "currency": "EUR",
+        "mileage": 55000,
+        "location": "Tiranë",
+        "description": "Petrol-electric hybrid, very economical, dealer maintained, clean."
+      },
+      "score_min": 65,
+      "score_max": 82
+    },
+    {
+      "id": "tc017",
+      "description": "Adequate — matching specs but mileage is unusually high for the year",
+      "profile": {
+        "make": "Renault",
+        "model": "Megane",
+        "year_min": 2016,
+        "year_max": 2020,
+        "price_max": 9000,
+        "currency": "EUR",
+        "mileage_max": 200000,
+        "free_text_criteria": ""
+      },
+      "listing": {
+        "title": "Renault Megane 2017",
+        "make": "Renault",
+        "model": "Megane",
+        "year": 2017,
+        "price": "6500",
+        "currency": "EUR",
+        "mileage": 198000,
+        "location": "Korçë",
+        "description": "High mileage but well maintained."
+      },
+      "score_min": 42,
+      "score_max": 62
+    },
+    {
+      "id": "tc018",
+      "description": "Excellent — buyer wants low mileage city car, perfect match",
+      "profile": {
+        "make": null,
+        "model": null,
+        "year_min": 2018,
+        "year_max": 2023,
+        "price_max": 8000,
+        "currency": "EUR",
+        "mileage_max": 60000,
+        "body_type": "hatchback",
+        "free_text_criteria": "city car, easy to park, low mileage"
+      },
+      "listing": {
+        "title": "Fiat 500 2020 — 28 000 km",
+        "make": "Fiat",
+        "model": "500",
+        "year": 2020,
+        "price": "7200",
+        "currency": "EUR",
+        "mileage": 28000,
+        "location": "Tiranë",
+        "description": "Ideal city car, very easy to park, minimal mileage, one owner, petrol, immaculate condition."
+      },
+      "score_min": 88,
+      "score_max": 100
+    },
+    {
+      "id": "tc019",
+      "description": "Weak — SUV listed for buyer who wants hatchback city car",
+      "profile": {
+        "make": null,
+        "model": null,
+        "year_min": 2018,
+        "year_max": 2023,
+        "price_max": 8000,
+        "currency": "EUR",
+        "mileage_max": 60000,
+        "body_type": "hatchback",
+        "free_text_criteria": "city car, easy to park, low mileage"
+      },
+      "listing": {
+        "title": "Nissan Qashqai 2019",
+        "make": "Nissan",
+        "model": "Qashqai",
+        "year": 2019,
+        "price": "7800",
+        "currency": "EUR",
+        "mileage": 55000,
+        "location": "Tiranë",
+        "description": "SUV, comfortable, good for family."
+      },
+      "score_min": 25,
+      "score_max": 48
+    },
+    {
+      "id": "tc020",
+      "description": "Good — dealer listing (buyer prefers private) but great specs",
+      "profile": {
+        "make": "Peugeot",
+        "model": "308",
+        "year_min": 2017,
+        "year_max": 2022,
+        "price_max": 13000,
+        "currency": "EUR",
+        "mileage_max": 150000,
+        "free_text_criteria": "prefer private seller, no hidden costs"
+      },
+      "listing": {
+        "title": "Peugeot 308 2019 — dealer",
+        "make": "Peugeot",
+        "model": "308",
+        "year": 2019,
+        "price": "11000",
+        "currency": "EUR",
+        "mileage": 88000,
+        "location": "Tiranë",
+        "description": "Dealer car, full warranty, inspection certificate, very clean inside and out."
+      },
+      "score_min": 62,
+      "score_max": 80
+    },
+    {
+      "id": "tc021",
+      "description": "Excellent — first-time buyer wants cheap reliable hatchback, perfect listing",
+      "profile": {
+        "make": null,
+        "model": null,
+        "year_min": 2010,
+        "year_max": 2018,
+        "price_max": 5000,
+        "currency": "EUR",
+        "mileage_max": 200000,
+        "free_text_criteria": "reliable, cheap to maintain, first car"
+      },
+      "listing": {
+        "title": "Toyota Corolla 2013 — very reliable",
+        "make": "Toyota",
+        "model": "Corolla",
+        "year": 2013,
+        "price": "4200",
+        "currency": "EUR",
+        "mileage": 155000,
+        "location": "Tiranë",
+        "description": "Japanese car, famous for reliability, cheap parts, recently serviced, very economical petrol engine, perfect first car."
+      },
+      "score_min": 85,
+      "score_max": 100
+    },
+    {
+      "id": "tc022",
+      "description": "Adequate — old luxury car, buyer wants reliable cheap first car",
+      "profile": {
+        "make": null,
+        "model": null,
+        "year_min": 2010,
+        "year_max": 2018,
+        "price_max": 5000,
+        "currency": "EUR",
+        "mileage_max": 200000,
+        "free_text_criteria": "reliable, cheap to maintain, first car"
+      },
+      "listing": {
+        "title": "BMW 730d 2011",
+        "make": "BMW",
+        "model": "730d",
+        "year": 2011,
+        "price": "4800",
+        "currency": "EUR",
+        "mileage": 185000,
+        "location": "Durrës",
+        "description": "Luxury sedan, excellent ride, needs some attention."
+      },
+      "score_min": 30,
+      "score_max": 52
+    },
+    {
+      "id": "tc023",
+      "description": "Excellent — buyer mentions leather seats, listing highlights it explicitly",
+      "profile": {
+        "make": "Volkswagen",
+        "model": "Passat",
+        "year_min": 2015,
+        "year_max": 2020,
+        "price_max": 17000,
+        "currency": "EUR",
+        "mileage_max": 200000,
+        "free_text_criteria": "leather seats, comfort package"
+      },
+      "listing": {
+        "title": "VW Passat 2017 Highline — full leather",
+        "make": "Volkswagen",
+        "model": "Passat",
+        "year": 2017,
+        "price": "13800",
+        "currency": "EUR",
+        "mileage": 130000,
+        "location": "Tiranë",
+        "description": "Highline trim with full leather interior, heated seats, comfort package, bi-xenon, lane assist."
+      },
+      "score_min": 88,
+      "score_max": 100
+    },
+    {
+      "id": "tc024",
+      "description": "Good — matching model but listing uses ALL currency while profile expects EUR",
+      "profile": {
+        "make": "Hyundai",
+        "model": "i30",
+        "year_min": 2016,
+        "year_max": 2021,
+        "price_max": 12000,
+        "currency": "EUR",
+        "mileage_max": 160000,
+        "free_text_criteria": ""
+      },
+      "listing": {
+        "title": "Hyundai i30 2018",
+        "make": "Hyundai",
+        "model": "i30",
+        "year": 2018,
+        "price": "1300000",
+        "currency": "ALL",
+        "mileage": 102000,
+        "location": "Tiranë",
+        "description": "Good condition, recently serviced."
+      },
+      "score_min": 58,
+      "score_max": 78
+    },
+    {
+      "id": "tc025",
+      "description": "Poor — listing clearly for parts, not a drivable car",
+      "profile": {
+        "make": "Mercedes-Benz",
+        "model": null,
+        "year_min": 2012,
+        "year_max": 2020,
+        "price_max": 20000,
+        "currency": "EUR",
+        "mileage_max": 250000,
+        "free_text_criteria": ""
+      },
+      "listing": {
+        "title": "Mercedes C200 2014 — FOR PARTS",
+        "make": "Mercedes-Benz",
+        "model": "C200",
+        "year": 2014,
+        "price": "2500",
+        "currency": "EUR",
+        "mileage": null,
+        "location": "Tiranë",
+        "description": "Engine seized, sold for parts only. No gearbox."
+      },
+      "score_min": 0,
+      "score_max": 15
+    },
+    {
+      "id": "tc026",
+      "description": "Excellent — buyer wants 4x4 for mountain driving, listing is a well-described 4WD",
+      "profile": {
+        "make": null,
+        "model": null,
+        "year_min": 2016,
+        "year_max": 2022,
+        "price_max": 22000,
+        "currency": "EUR",
+        "mileage_max": 180000,
+        "free_text_criteria": "4x4 or AWD, good ground clearance, mountain driving"
+      },
+      "listing": {
+        "title": "Toyota RAV4 2019 AWD",
+        "make": "Toyota",
+        "model": "RAV4",
+        "year": 2019,
+        "price": "19500",
+        "currency": "EUR",
+        "mileage": 89000,
+        "location": "Tiranë",
+        "description": "Full AWD system, high ground clearance, excellent in mountain and snow conditions, dealer maintained."
+      },
+      "score_min": 88,
+      "score_max": 100
+    },
+    {
+      "id": "tc027",
+      "description": "Adequate — FWD SUV listed for buyer who explicitly wants AWD",
+      "profile": {
+        "make": null,
+        "model": null,
+        "year_min": 2016,
+        "year_max": 2022,
+        "price_max": 22000,
+        "currency": "EUR",
+        "mileage_max": 180000,
+        "free_text_criteria": "4x4 or AWD, good ground clearance, mountain driving"
+      },
+      "listing": {
+        "title": "Nissan Qashqai 2018 FWD",
+        "make": "Nissan",
+        "model": "Qashqai",
+        "year": 2018,
+        "price": "15000",
+        "currency": "EUR",
+        "mileage": 121000,
+        "location": "Durrës",
+        "description": "Front-wheel drive, urban SUV, comfortable ride."
+      },
+      "score_min": 30,
+      "score_max": 55
+    },
+    {
+      "id": "tc028",
+      "description": "Good — price well under budget, reasonable mileage, matches make/model",
+      "profile": {
+        "make": "Seat",
+        "model": "Leon",
+        "year_min": 2015,
+        "year_max": 2020,
+        "price_max": 12000,
+        "currency": "EUR",
+        "mileage_max": 180000,
+        "free_text_criteria": ""
+      },
+      "listing": {
+        "title": "Seat Leon 2017",
+        "make": "Seat",
+        "model": "Leon",
+        "year": 2017,
+        "price": "7800",
+        "currency": "EUR",
+        "mileage": 143000,
+        "location": "Tiranë",
+        "description": "Good daily driver, some minor scratches, recently passed inspection."
+      },
+      "score_min": 65,
+      "score_max": 82
+    },
+    {
+      "id": "tc029",
+      "description": "Excellent — no-accident requirement, listing explicitly confirms clean accident history",
+      "profile": {
+        "make": "Mazda",
+        "model": null,
+        "year_min": 2017,
+        "year_max": 2023,
+        "price_max": 19000,
+        "currency": "EUR",
+        "mileage_max": 130000,
+        "free_text_criteria": "no accidents, clean title, Mazda 3 or Mazda 6"
+      },
+      "listing": {
+        "title": "Mazda 6 2019 — zero accidents",
+        "make": "Mazda",
+        "model": "6",
+        "year": 2019,
+        "price": "17500",
+        "currency": "EUR",
+        "mileage": 79000,
+        "location": "Tiranë",
+        "description": "Zero accidents confirmed, clean title, full Mazda service history, non-smoker interior."
+      },
+      "score_min": 88,
+      "score_max": 100
+    },
+    {
+      "id": "tc030",
+      "description": "Adequate — make matches but model is different from requested variants",
+      "profile": {
+        "make": "Mazda",
+        "model": null,
+        "year_min": 2017,
+        "year_max": 2023,
+        "price_max": 19000,
+        "currency": "EUR",
+        "mileage_max": 130000,
+        "free_text_criteria": "no accidents, clean title, Mazda 3 or Mazda 6"
+      },
+      "listing": {
+        "title": "Mazda CX-5 2018",
+        "make": "Mazda",
+        "model": "CX-5",
+        "year": 2018,
+        "price": "16000",
+        "currency": "EUR",
+        "mileage": 105000,
+        "location": "Tiranë",
+        "description": "SUV, clean, no accidents."
+      },
+      "score_min": 48,
+      "score_max": 68
+    },
+    {
+      "id": "tc031",
+      "description": "Good — tow bar requested, listing confirms it",
+      "profile": {
+        "make": "Volkswagen",
+        "model": "Touareg",
+        "year_min": 2014,
+        "year_max": 2020,
+        "price_max": 25000,
+        "currency": "EUR",
+        "mileage_max": 230000,
+        "free_text_criteria": "tow bar, V6 diesel preferred"
+      },
+      "listing": {
+        "title": "VW Touareg 2016 V6 TDI",
+        "make": "Volkswagen",
+        "model": "Touareg",
+        "year": 2016,
+        "price": "22000",
+        "currency": "EUR",
+        "mileage": 168000,
+        "location": "Tiranë",
+        "description": "V6 3.0 TDI, tow bar factory fitted, R-Line exterior, excellent condition."
+      },
+      "score_min": 82,
+      "score_max": 96
+    },
+    {
+      "id": "tc032",
+      "description": "Poor — automatic for buyer who specifically wants manual",
+      "profile": {
+        "make": "Honda",
+        "model": "Civic",
+        "year_min": 2017,
+        "year_max": 2022,
+        "price_max": 15000,
+        "currency": "EUR",
+        "mileage_max": 130000,
+        "transmission": "manual",
+        "free_text_criteria": "must be manual gearbox"
+      },
+      "listing": {
+        "title": "Honda Civic 2019 automatic CVT",
+        "make": "Honda",
+        "model": "Civic",
+        "year": 2019,
+        "price": "13500",
+        "currency": "EUR",
+        "mileage": 71000,
+        "location": "Tiranë",
+        "description": "CVT automatic, very smooth, economical."
+      },
+      "score_min": 5,
+      "score_max": 28
+    },
+    {
+      "id": "tc033",
+      "description": "Excellent — family car with 7 seats, buyer explicitly needs 7 seats",
+      "profile": {
+        "make": null,
+        "model": null,
+        "year_min": 2015,
+        "year_max": 2022,
+        "price_max": 20000,
+        "currency": "EUR",
+        "mileage_max": 200000,
+        "free_text_criteria": "7 seats, large family car, space for luggage"
+      },
+      "listing": {
+        "title": "Ford Galaxy 2018 — 7 seats",
+        "make": "Ford",
+        "model": "Galaxy",
+        "year": 2018,
+        "price": "16500",
+        "currency": "EUR",
+        "mileage": 138000,
+        "location": "Tiranë",
+        "description": "7-seater MPV, all seats fold flat for max luggage space, full service history, excellent family car."
+      },
+      "score_min": 88,
+      "score_max": 100
+    },
+    {
+      "id": "tc034",
+      "description": "Adequate — 5-seat sedan for buyer who needs 7 seats",
+      "profile": {
+        "make": null,
+        "model": null,
+        "year_min": 2015,
+        "year_max": 2022,
+        "price_max": 20000,
+        "currency": "EUR",
+        "mileage_max": 200000,
+        "free_text_criteria": "7 seats, large family car, space for luggage"
+      },
+      "listing": {
+        "title": "BMW 5 Series 2017",
+        "make": "BMW",
+        "model": "520d",
+        "year": 2017,
+        "price": "18500",
+        "currency": "EUR",
+        "mileage": 152000,
+        "location": "Tiranë",
+        "description": "Executive sedan, comfortable and spacious, premium sound system."
+      },
+      "score_min": 28,
+      "score_max": 52
+    },
+    {
+      "id": "tc035",
+      "description": "Good — slightly above average mileage but great price and thorough description",
+      "profile": {
+        "make": "Kia",
+        "model": "Sportage",
+        "year_min": 2016,
+        "year_max": 2021,
+        "price_max": 16000,
+        "currency": "EUR",
+        "mileage_max": 180000,
+        "free_text_criteria": ""
+      },
+      "listing": {
+        "title": "Kia Sportage 2018 — full options",
+        "make": "Kia",
+        "model": "Sportage",
+        "year": 2018,
+        "price": "12800",
+        "currency": "EUR",
+        "mileage": 165000,
+        "location": "Tiranë",
+        "description": "Full option pack, panoramic roof, heated seats, reverse camera, blind spot monitor, 7-year Kia warranty still valid."
+      },
+      "score_min": 68,
+      "score_max": 85
+    },
+    {
+      "id": "tc036",
+      "description": "Excellent — recently imported RHD is a red flag but profile has no such concern",
+      "profile": {
+        "make": "Land Rover",
+        "model": "Defender",
+        "year_min": 2018,
+        "year_max": 2024,
+        "price_max": 60000,
+        "currency": "EUR",
+        "mileage_max": 100000,
+        "free_text_criteria": "off-road capable, good condition"
+      },
+      "listing": {
+        "title": "Land Rover Defender 110 2021",
+        "make": "Land Rover",
+        "model": "Defender",
+        "year": 2021,
+        "price": "55000",
+        "currency": "EUR",
+        "mileage": 42000,
+        "location": "Tiranë",
+        "description": "P400 petrol, excellent off-road, full service history, original condition."
+      },
+      "score_min": 82,
+      "score_max": 96
+    },
+    {
+      "id": "tc037",
+      "description": "Weak — brand-new listing with no description at all, high price",
+      "profile": {
+        "make": "Volvo",
+        "model": "XC60",
+        "year_min": 2017,
+        "year_max": 2022,
+        "price_max": 35000,
+        "currency": "EUR",
+        "mileage_max": 150000,
+        "free_text_criteria": "Scandinavian safety features, good condition"
+      },
+      "listing": {
+        "title": "Volvo XC60 2019",
+        "make": "Volvo",
+        "model": "XC60",
+        "year": 2019,
+        "price": "34900",
+        "currency": "EUR",
+        "mileage": 140000,
+        "location": "Tiranë",
+        "description": ""
+      },
+      "score_min": 30,
+      "score_max": 55
+    },
+    {
+      "id": "tc038",
+      "description": "Good — Volvo XC60 with decent description but no safety feature mention",
+      "profile": {
+        "make": "Volvo",
+        "model": "XC60",
+        "year_min": 2017,
+        "year_max": 2022,
+        "price_max": 35000,
+        "currency": "EUR",
+        "mileage_max": 150000,
+        "free_text_criteria": "Scandinavian safety features, good condition"
+      },
+      "listing": {
+        "title": "Volvo XC60 2018 D5",
+        "make": "Volvo",
+        "model": "XC60",
+        "year": 2018,
+        "price": "28000",
+        "currency": "EUR",
+        "mileage": 115000,
+        "location": "Tiranë",
+        "description": "D5 diesel, very well maintained, no accidents, clean interior."
+      },
+      "score_min": 65,
+      "score_max": 82
+    },
+    {
+      "id": "tc039",
+      "description": "Excellent — Volvo XC60 with explicit Volvo safety tech mentioned",
+      "profile": {
+        "make": "Volvo",
+        "model": "XC60",
+        "year_min": 2017,
+        "year_max": 2022,
+        "price_max": 35000,
+        "currency": "EUR",
+        "mileage_max": 150000,
+        "free_text_criteria": "Scandinavian safety features, good condition"
+      },
+      "listing": {
+        "title": "Volvo XC60 2020 — Pilot Assist, City Safety",
+        "make": "Volvo",
+        "model": "XC60",
+        "year": 2020,
+        "price": "31500",
+        "currency": "EUR",
+        "mileage": 68000,
+        "location": "Tiranë",
+        "description": "Full Volvo safety suite: Pilot Assist, City Safety, BLIS, Lane Keeping Aid. Immaculate condition, one owner, dealer serviced."
+      },
+      "score_min": 90,
+      "score_max": 100
+    },
+    {
+      "id": "tc040",
+      "description": "Poor — title says 2019 but description says engine from 2012",
+      "profile": {
+        "make": "Audi",
+        "model": "Q5",
+        "year_min": 2017,
+        "year_max": 2022,
+        "price_max": 30000,
+        "currency": "EUR",
+        "mileage_max": 200000,
+        "free_text_criteria": "original, no engine swaps"
+      },
+      "listing": {
+        "title": "Audi Q5 2019",
+        "make": "Audi",
+        "model": "Q5",
+        "year": 2019,
+        "price": "26000",
+        "currency": "EUR",
+        "mileage": 180000,
+        "location": "Tiranë",
+        "description": "Body 2019, engine replaced with 2012 unit. Runs perfectly."
+      },
+      "score_min": 0,
+      "score_max": 22
+    },
+    {
+      "id": "tc041",
+      "description": "Good — matching model, warranty still valid, good price ratio",
+      "profile": {
+        "make": "Dacia",
+        "model": "Duster",
+        "year_min": 2018,
+        "year_max": 2023,
+        "price_max": 14000,
+        "currency": "EUR",
+        "mileage_max": 130000,
+        "free_text_criteria": "budget AWD, prefer warranty"
+      },
+      "listing": {
+        "title": "Dacia Duster 2021 4x4",
+        "make": "Dacia",
+        "model": "Duster",
+        "year": 2021,
+        "price": "11500",
+        "currency": "EUR",
+        "mileage": 52000,
+        "location": "Tiranë",
+        "description": "4WD, manufacturer warranty until 2024, economical, practical SUV."
+      },
+      "score_min": 78,
+      "score_max": 94
+    },
+    {
+      "id": "tc042",
+      "description": "Adequate — right model but FWD only, no mention of warranty",
+      "profile": {
+        "make": "Dacia",
+        "model": "Duster",
+        "year_min": 2018,
+        "year_max": 2023,
+        "price_max": 14000,
+        "currency": "EUR",
+        "mileage_max": 130000,
+        "free_text_criteria": "budget AWD, prefer warranty"
+      },
+      "listing": {
+        "title": "Dacia Duster 2019 2WD",
+        "make": "Dacia",
+        "model": "Duster",
+        "year": 2019,
+        "price": "9000",
+        "currency": "EUR",
+        "mileage": 87000,
+        "location": "Durrës",
+        "description": "Front wheel drive, economical, good condition."
+      },
+      "score_min": 40,
+      "score_max": 62
+    },
+    {
+      "id": "tc043",
+      "description": "Excellent — convertible buyer gets exactly a convertible with good description",
+      "profile": {
+        "make": null,
+        "model": null,
+        "year_min": 2015,
+        "year_max": 2022,
+        "price_max": 25000,
+        "currency": "EUR",
+        "mileage_max": 120000,
+        "body_type": "convertible",
+        "free_text_criteria": "open-top, summer car, good condition"
+      },
+      "listing": {
+        "title": "BMW 420i Cabrio 2017",
+        "make": "BMW",
+        "model": "420i",
+        "year": 2017,
+        "price": "22000",
+        "currency": "EUR",
+        "mileage": 78000,
+        "location": "Tiranë",
+        "description": "Cabriolet, electric roof works perfectly, excellent summer car, no accidents, full service history."
+      },
+      "score_min": 88,
+      "score_max": 100
+    },
+    {
+      "id": "tc044",
+      "description": "Weak — coupe not convertible, top cannot be opened",
+      "profile": {
+        "make": null,
+        "model": null,
+        "year_min": 2015,
+        "year_max": 2022,
+        "price_max": 25000,
+        "currency": "EUR",
+        "mileage_max": 120000,
+        "body_type": "convertible",
+        "free_text_criteria": "open-top, summer car, good condition"
+      },
+      "listing": {
+        "title": "BMW 420i Coupe 2016",
+        "make": "BMW",
+        "model": "420i",
+        "year": 2016,
+        "price": "18000",
+        "currency": "EUR",
+        "mileage": 93000,
+        "location": "Tiranë",
+        "description": "Fixed roof coupe, sporty, very good condition."
+      },
+      "score_min": 20,
+      "score_max": 45
+    },
+    {
+      "id": "tc045",
+      "description": "Good — correct specs but seller is a business and buyer prefers private",
+      "profile": {
+        "make": "Citroen",
+        "model": "C4",
+        "year_min": 2016,
+        "year_max": 2021,
+        "price_max": 11000,
+        "currency": "EUR",
+        "mileage_max": 170000,
+        "free_text_criteria": "prefer private seller, not a dealership"
+      },
+      "listing": {
+        "title": "Citroen C4 2018 — Auto Dhendo Tiranë",
+        "make": "Citroen",
+        "model": "C4",
+        "year": 2018,
+        "price": "9500",
+        "currency": "EUR",
+        "mileage": 132000,
+        "location": "Tiranë",
+        "description": "Dealer car with 6-month warranty, full inspection, invoice provided."
+      },
+      "score_min": 55,
+      "score_max": 75
+    },
+    {
+      "id": "tc046",
+      "description": "Excellent — buyer mentions inspection certificate, listing has it",
+      "profile": {
+        "make": "Citroen",
+        "model": "C4",
+        "year_min": 2016,
+        "year_max": 2021,
+        "price_max": 11000,
+        "currency": "EUR",
+        "mileage_max": 170000,
+        "free_text_criteria": "inspection certificate, private seller"
+      },
+      "listing": {
+        "title": "Citroen C4 2019 — private, inspected",
+        "make": "Citroen",
+        "model": "C4",
+        "year": 2019,
+        "price": "9200",
+        "currency": "EUR",
+        "mileage": 88000,
+        "location": "Shkodër",
+        "description": "Private seller, full inspection certificate valid 2 years, no accidents, one owner, non-smoker."
+      },
+      "score_min": 88,
+      "score_max": 100
+    },
+    {
+      "id": "tc047",
+      "description": "Poor — listing describes a non-car (motorcycle) that slipped past title filter",
+      "profile": {
+        "make": "Honda",
+        "model": null,
+        "year_min": 2015,
+        "year_max": 2023,
+        "price_max": 15000,
+        "currency": "EUR",
+        "mileage_max": 150000,
+        "free_text_criteria": "4-door car for family use"
+      },
+      "listing": {
+        "title": "Honda CBR 600RR 2017 — motorbike",
+        "make": "Honda",
+        "model": "CBR 600RR",
+        "year": 2017,
+        "price": "7000",
+        "currency": "EUR",
+        "mileage": 22000,
+        "location": "Tiranë",
+        "description": "Motorcycle, excellent condition, full leathers included."
+      },
+      "score_min": 0,
+      "score_max": 12
+    },
+    {
+      "id": "tc048",
+      "description": "Good — petrol engine while buyer wanted diesel, rest is excellent",
+      "profile": {
+        "make": "Volkswagen",
+        "model": "Tiguan",
+        "year_min": 2017,
+        "year_max": 2022,
+        "price_max": 28000,
+        "currency": "EUR",
+        "mileage_max": 160000,
+        "fuel_type": "diesel",
+        "free_text_criteria": "diesel preferred for economy"
+      },
+      "listing": {
+        "title": "VW Tiguan 2019 TSI petrol",
+        "make": "Volkswagen",
+        "model": "Tiguan",
+        "year": 2019,
+        "price": "22000",
+        "currency": "EUR",
+        "mileage": 75000,
+        "location": "Tiranë",
+        "description": "1.5 TSI petrol, full service history, accident-free, very clean inside and out."
+      },
+      "score_min": 52,
+      "score_max": 72
+    },
+    {
+      "id": "tc049",
+      "description": "Excellent — all soft criteria met, priced well below budget",
+      "profile": {
+        "make": "Volkswagen",
+        "model": "Tiguan",
+        "year_min": 2017,
+        "year_max": 2022,
+        "price_max": 28000,
+        "currency": "EUR",
+        "mileage_max": 160000,
+        "fuel_type": "diesel",
+        "free_text_criteria": "diesel preferred, no accidents, good condition"
+      },
+      "listing": {
+        "title": "VW Tiguan 2020 TDI diesel — no accidents",
+        "make": "Volkswagen",
+        "model": "Tiguan",
+        "year": 2020,
+        "price": "21000",
+        "currency": "EUR",
+        "mileage": 88000,
+        "location": "Tiranë",
+        "description": "2.0 TDI diesel, zero accidents, full dealer service history, excellent condition in and out, one owner."
+      },
+      "score_min": 90,
+      "score_max": 100
+    },
+    {
+      "id": "tc050",
+      "description": "Adequate — all numeric bounds met but description raises questions (unclear mileage)",
+      "profile": {
+        "make": "Subaru",
+        "model": "Forester",
+        "year_min": 2016,
+        "year_max": 2022,
+        "price_max": 20000,
+        "currency": "EUR",
+        "mileage_max": 180000,
+        "free_text_criteria": "AWD Subaru, honest seller"
+      },
+      "listing": {
+        "title": "Subaru Forester 2018 AWD",
+        "make": "Subaru",
+        "model": "Forester",
+        "year": 2018,
+        "price": "16500",
+        "currency": "EUR",
+        "mileage": 95000,
+        "location": "Tiranë",
+        "description": "Symmetrical AWD, mileage not verified, price negotiable."
+      },
+      "score_min": 45,
+      "score_max": 68
+    }
+  ]
+}

@@ -23,6 +23,16 @@ class Settings(BaseSettings):
     FIREBASE_CREDENTIALS: str = os.getenv("FIREBASE_CREDENTIALS", "{}")
     FIREBASE_PROJECT_ID: str = os.getenv("FIREBASE_PROJECT_ID", "autoscout-dev")
 
+    # Crawler
+    CRAWL_SOURCES: str = os.getenv("CRAWL_SOURCES", "merrjep")
+
+    # Cloudflare R2 (S3-compatible) for listing photos
+    R2_ACCOUNT_ID: str = os.getenv("R2_ACCOUNT_ID", "")
+    R2_ACCESS_KEY_ID: str = os.getenv("R2_ACCESS_KEY_ID", "")
+    R2_SECRET_ACCESS_KEY: str = os.getenv("R2_SECRET_ACCESS_KEY", "")
+    R2_BUCKET_NAME: str = os.getenv("R2_BUCKET_NAME", "autoscout-listings")
+    R2_PUBLIC_URL: str = os.getenv("R2_PUBLIC_URL", "")
+
     # Anthropic
     ANTHROPIC_API_KEY: str = os.getenv("ANTHROPIC_API_KEY", "")
 

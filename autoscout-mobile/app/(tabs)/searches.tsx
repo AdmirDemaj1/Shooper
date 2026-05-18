@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 import {
   View,
   Text,
@@ -12,7 +12,7 @@ import {
 import { useRouter } from 'expo-router';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useProfileStore } from '../../store/profileStore';
-import { SearchProfile } from '../../lib/api';
+import { SearchProfile, matchingApi } from '../../lib/api';
 
 function profileSummary(p: SearchProfile): string {
   const parts: string[] = [];
@@ -28,12 +28,33 @@ function profileSummary(p: SearchProfile): string {
 function ProfileCard({ profile }: { profile: SearchProfile }) {
   const { toggle, remove } = useProfileStore();
   const router = useRouter();
+  const [running, setRunning] = useState(false);
 
   function confirmDelete() {
     Alert.alert('Delete search?', `"${profile.name}" will be permanently removed.`, [
       { text: 'Cancel', style: 'cancel' },
       { text: 'Delete', style: 'destructive', onPress: () => remove(profile.id) },
     ]);
+  }
+
+  async function findMatches() {
+    if (running) return;
+    setRunning(true);
+    try {
+      const result = await matchingApi.runNow(profile.id);
+      const msg =
+        result.inserted > 0
+          ? `Found ${result.inserted} new match${result.inserted !== 1 ? 'es' : ''}. Top ${result.top_n} selected.`
+          : 'No new matches found right now.';
+      Alert.alert('Done', msg, [
+        { text: 'View History', onPress: () => router.push('/(tabs)/history') },
+        { text: 'OK', style: 'cancel' },
+      ]);
+    } catch {
+      Alert.alert('Error', 'Could not run matching. Make sure the backend is running.');
+    } finally {
+      setRunning(false);
+    }
   }
 
   return (
@@ -48,6 +69,19 @@ function ProfileCard({ profile }: { profile: SearchProfile }) {
         />
       </View>
       <Text style={styles.cardSummary}>{profileSummary(profile)}</Text>
+      <TouchableOpacity
+        style={[styles.findMatchesBtn, running && styles.findMatchesBtnDisabled]}
+        onPress={findMatches}
+        disabled={running}
+        activeOpacity={0.8}
+      >
+        {running ? (
+          <ActivityIndicator size="small" color="#fff" />
+        ) : (
+          <MaterialIcons name="search" size={16} color="#fff" />
+        )}
+        <Text style={styles.findMatchesBtnText}>{running ? 'Finding matches…' : 'Find Matches Now'}</Text>
+      </TouchableOpacity>
       <View style={styles.cardActions}>
         <TouchableOpacity
           style={styles.actionBtn}
@@ -163,6 +197,9 @@ const styles = StyleSheet.create({
   cardHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 },
   cardName: { fontSize: 16, fontWeight: '600', color: '#111', flex: 1, marginRight: 8 },
   cardSummary: { fontSize: 13, color: '#666', marginBottom: 12 },
+  findMatchesBtn: { backgroundColor: '#2E7D32', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, paddingVertical: 10, borderRadius: 8, marginBottom: 10 },
+  findMatchesBtnDisabled: { backgroundColor: '#81A784' },
+  findMatchesBtnText: { color: '#fff', fontSize: 14, fontWeight: '600' },
   cardActions: { flexDirection: 'row', gap: 8 },
   actionBtn: { flexDirection: 'row', alignItems: 'center', gap: 4, paddingVertical: 6, paddingHorizontal: 10, borderRadius: 6, borderWidth: 1, borderColor: '#2E7D32' },
   actionBtnText: { fontSize: 13, color: '#2E7D32', fontWeight: '500' },
